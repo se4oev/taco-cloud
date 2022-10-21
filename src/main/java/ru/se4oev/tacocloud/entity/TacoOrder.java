@@ -2,9 +2,9 @@ package ru.se4oev.tacocloud.entity;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.CreditCardNumber;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -13,12 +13,13 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-@Table
+@Entity
 public class TacoOrder {
 
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Date createDate = new Date();
@@ -45,8 +46,9 @@ public class TacoOrder {
     private String ccExpiration;
 
     @Digits(integer = 3, fraction = 0, message = "Invalid CVV")
-    private String ccCVV;
+    private String ccCvv;
 
+    @OneToMany(mappedBy = "tacoOrder", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Taco> tacos = new ArrayList<>();
 
     public void addTaco(Taco taco) {

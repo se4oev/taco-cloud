@@ -12,6 +12,7 @@ import ru.se4oev.tacocloud.entity.TacoOrder;
 import ru.se4oev.tacocloud.repository.OrderRepository;
 
 import javax.validation.Valid;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @Controller
@@ -36,6 +37,11 @@ public class OrderController {
             return "orderForm";
 
         log.info("Order submittes: {}", order);
+        AtomicInteger i = new AtomicInteger(1);
+        order.getTacos().forEach(t -> {
+            t.setTacoOrder(order);
+            t.setTacoOrderKey(i.getAndIncrement());
+        });
         orderRepository.save(order);
         sessionStatus.setComplete();
 
