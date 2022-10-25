@@ -14,7 +14,7 @@ import java.util.Optional;
  * Created by karpenko on 24.10.2022.
  * Description:
  */
-@RestController
+//@RestController
 @RequestMapping(path = "/api/tacos", produces = "application/json")
 @CrossOrigin(origins = "http://tacocloud:8080")
 public class TacoController {
@@ -37,6 +37,12 @@ public class TacoController {
         if (optionalTaco.isPresent())
             return new ResponseEntity<>(optionalTaco.get(), HttpStatus.OK);
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+
+    @PostMapping(consumes = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Taco postTaco(@RequestBody Taco taco) {
+        return tacoRepository.save(taco);
     }
 
 }
